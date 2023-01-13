@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect
 #Função para cadastrar no sistema
 def cadastro(request):
     if request.method == "GET":
+        #Caso usuario esteja autenticado, dar um redirect
         if request.user.is_authenticated:
             return redirect('/divulgar/novo_pet')
 
@@ -47,6 +48,7 @@ def cadastro(request):
 #Função para logar no sistema
 def logar(request):
     if request.method == "GET":
+        #caso o usuario estreja autenticado, logar dando redirect a esse endereço
         if request.user.is_authenticated:
             return redirect('/divulgar/novo_pet')
 
@@ -55,15 +57,19 @@ def logar(request):
         nome = request.POST.get('nome')
         senha = request.POST.get('senha')
 
+        #autenticar no banco de dados
         user = authenticate(username=nome, password=senha)
         if user is not None:
             login(request, user)
+            messages.add_message(request, constants.SUCCESS, 'Usuário logado com sucesso')
             return redirect('/divulgar/novo_pet')
+
         else:
             messages.add_message(request, constants.ERROR, 'Usuário ou senha inválidos')
             return render(request, 'login.html')
 
 
 def sair(request):
+    #Deslogar o usuario
     logout(request)
     return redirect('/auth/login')
