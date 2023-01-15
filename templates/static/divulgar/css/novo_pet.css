@@ -21,3 +21,9 @@
 .font-vinho {
     color: #A24D52;
 }
+
+@media only screen and (min-width: 600px) {
+    .bg-side {
+      height: 888px;
+    }
+  }
