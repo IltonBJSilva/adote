@@ -50,7 +50,7 @@ def logar(request):
     if request.method == "GET":
         #caso o usuario estreja autenticado, logar dando redirect a esse endereço
         if request.user.is_authenticated:
-            return redirect('/divulgar/novo_pet')
+            return redirect('/adotar/')
 
         return render(request, 'login.html')
     elif request.method == "POST":
