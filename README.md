@@ -17,13 +17,19 @@ Desenvolvida uma aplicação completa para adoção de animais.
 - Listagem, Cadastro e Remoção de Pets
 - Listagem e Busca de Pets para adoção
 
-###
+## Login de Usuario
+![alt text](https://github.com/IltonBJSilva/adote/blob/main/templates/static/readme/logar.png?raw=true)
 
-![alt text](https://raw.githubusercontent.com/samuel-oldra/ADO.TE/main/README_IMGS/logar.png)
-![alt text](https://raw.githubusercontent.com/samuel-oldra/ADO.TE/main/README_IMGS/cadastre-se.png)
-![alt text](https://raw.githubusercontent.com/samuel-oldra/ADO.TE/main/README_IMGS/novo_pet.png)
-![alt text](https://raw.githubusercontent.com/samuel-oldra/ADO.TE/main/README_IMGS/seus_pets.png)
-![alt text](https://raw.githubusercontent.com/samuel-oldra/ADO.TE/main/README_IMGS/adote.png)
+## Cadastro de Usuario
+![alt text](https://github.com/IltonBJSilva/adote/blob/main/templates/static/readme/cadastre-se.png?raw=true)
+
+## Cadastro de Pet
+![alt text](https://github.com/IltonBJSilva/adote/blob/main/templates/static/readme/novo_pet.png?raw=true)
+## Meus Pet
+![alt text](https://github.com/IltonBJSilva/adote/blob/main/templates/static/readme/seus_pets.png?raw=true)
+
+## Lista de Pet
+![alt text](https://github.com/IltonBJSilva/adote/blob/main/templates/static/readme/adote.png?raw=true)
 
 ## Comandos
 
