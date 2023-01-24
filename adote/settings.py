@@ -143,7 +143,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 
-
+LOGIN_REDIRECT_URL = '/adotar/'
+LOGOUT_REDIRECT_URL = '/auth/login/'
 
 
 
