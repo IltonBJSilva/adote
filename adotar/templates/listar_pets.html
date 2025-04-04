@@ -1,98 +1,152 @@
 {% load static %}
-
 <!doctype html>
 <html lang="pt-BR">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Cadastro</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{% static 'usuarios/css/cadastro.css' %}" rel="stylesheet">
-    <link href="{% static 'divulgar/css/novo_pet.css' %}" rel="stylesheet">
-    <link href="{% static 'divulgar/css/seus_pet.css' %}" rel="stylesheet">
-    <link href="{% static 'adotar/css/listar_pets.css' %}" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Adote</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{% static 'adotar/css/listar_pets.css' %}" rel="stylesheet">
+
+  <style>
+    .font-vinho {
+      color: #6a1b9a;
+      font-weight: bold;
+    }
+
+    .box {
+      background-color: #f9f9f9;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .btn-custom-secondary {
+      background-color: #6a1b9a;
+      color: #fff;
+      font-weight: bold;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      transition: 0.3s;
+    }
+
+    .btn-custom-secondary:hover {
+      background-color: #4e1472;
+    }
+
+    .pet-img {
+      max-width: 90px;
+      border-radius: 8px;
+      transition: transform 0.3s ease;
+    }
+
+    .pet-img:hover {
+      transform: scale(1.1);
+    }
+
+    .badge {
+      font-size: 0.9rem;
+      padding: 6px 12px;
+    }
+
+    .tag {
+      background-color: #eee;
+      color: #555;
+      font-size: 0.75rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin: 2px;
+      display: inline-block;
+    }
+  </style>
 </head>
 <body>
+
 <div class="container-fluid">
-    <div class="row">
-		{% include "side_bar.html" %}
+  <div class="row">
+    {% include "side_bar.html" %}
 
-        <div class="col-md">
-            <div class="wrapper">
-                <div class="box width80">
+    <div class="col-md p-4">
+      <div class="box">
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert {{ message.tags }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
 
-                    {% if messages %}
-                        <br>
-                        {% for message in messages %}
-                            <div class="alert {{ message.tags }}">
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                    {% endif %}
+        <h3 class="font-vinho mb-3">🐾 Encontre seu novo melhor amigo</h3>
+        <hr>
 
-                    <h3 class="font-vinho">Adote</h3>
-                    <hr>
-                    <form action="{% url 'listar_pets' %}" method="GET">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <input type="text" placeholder="Cidade..."
-                                       value="{% if cidade %}{{ cidade }}{% endif %}" name="cidade"
-                                       class="form-control">
-                            </div>
-                            <div class="col-md-4">
-                                <select class="form-select" name="raca">
-                                    <option value="">-- SELECIONE --</option>
-
-                                    {% for raca in racas %}
-                                        <option value="{{ raca.id }}" {% if raca_filter.id == raca.id %}
-                                                selected {% endif %}>{{ raca }}</option>
-                                    {% endfor %}
-
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <input type="submit" class="btn-custom-secondary" value="FILTRAR">
-                            </div>
-                        </div>
-                    </form>
-                    <table class="tabela" cellpadding="20">
-                        <tr>
-                            <th>Foto</th>
-                            <th>Nome</th>
-                            <th>Raça</th>
-                            <th>Status</th>
-                            <th>Cidade</th>
-                        </tr>
-
-                        {% for pet in pets %}
-                            <tr class="tabela-linha">
-                                <td width="20%">
-                                    <a href="{% url 'ver_pet' pet.id %}"><img width="40%" src="{{ pet.foto.url }}"></a>
-                                </td>
-                                <td>
-                                    {{ pet.nome }}
-                                </td>
-                                <td>
-                                    {{ pet.raca }}
-                                </td>
-                                <td>
-                                    {% if pet.status == "P" %}
-                                        <span class="badge text-bg-primary">Para adoção</span>
-                                    {% elif pet.status == "A" %}
-                                        <span class="badge text-bg-success">Adotado</span>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    {{ pet.cidade }}
-                                </td>
-                            </tr>
-                        {% endfor %}
-
-                    </table>
-                </div>
+        <form action="{% url 'listar_pets' %}" method="GET" class="mb-4">
+          <div class="row">
+            <div class="col-md-6 mb-2">
+              <input type="text" placeholder="Cidade..." name="cidade" class="form-control"
+                     value="{{ cidade|default:'' }}">
             </div>
+            <div class="col-md-4 mb-2">
+              <select class="form-select" name="raca">
+                <option value="">-- SELECIONE A RAÇA --</option>
+                {% for raca in racas %}
+                  <option value="{{ raca.id }}" {% if raca_filter.id == raca.id %}selected{% endif %}>{{ raca }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-2 mb-2">
+              <input type="submit" class="btn-custom-secondary w-100" value="FILTRAR">
+            </div>
+          </div>
+        </form>
+
+        <div class="table-responsive">
+          <table class="table align-middle table-bordered bg-white">
+            <thead class="table-light">
+              <tr>
+                <th>Foto</th>
+                <th>Nome</th>
+                <th>Raça</th>
+                <th>Status</th>
+                <th>Idade</th>
+                <th>Estado</th>
+                <th>Cidade</th>
+                <th>Tags</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for pet in pets %}
+                <tr>
+                  <td>
+                    <a href="{% url 'ver_pet' pet.id %}">
+                      <img src="{{ pet.foto.url }}" alt="{{ pet.nome }}" class="pet-img">
+                    </a>
+                  </td>
+                  <td>{{ pet.nome }}</td>
+                  <td>{{ pet.raca }}</td>
+                  <td>
+                    {% if pet.status == "P" %}
+                      <span class="badge text-bg-primary">Para adoção</span>
+                    {% elif pet.status == "A" %}
+                      <span class="badge text-bg-success">Adotado</span>
+                    {% endif %}
+                  </td>
+                  <td>{{ pet.idade|default:"-" }}</td>
+                  <td>{{ pet.estado }}</td>
+                  <td>{{ pet.cidade }}</td>
+                  <td>
+                    {% for tag in pet.tags.all %}
+                      <span class="tag">{{ tag }}</span>
+                    {% endfor %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
+
+      </div>
     </div>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
