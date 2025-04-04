@@ -1,73 +1,148 @@
 {% load static %}
 <!doctype html>
 <html lang="pt-BR">
-    <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Cadastro</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{% static 'usuarios/css/cadastro.css' %}" rel="stylesheet">
-    <link href="{% static 'divulgar/css/novo_pet.css' %}" rel="stylesheet">
-    <link href="{% static 'divulgar/css/seus_pet.css' %}" rel="stylesheet">
-    <link href="{% static 'adotar/css/listar_pets.css' %}" rel="stylesheet">
-    </head>
-    <body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard</title>
 
-        <div class="container-fluid">
-            <div class="row">
-                {% include "side_bar.html" %}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{% static 'usuarios/css/cadastro.css' %}" rel="stylesheet">
+  <link href="{% static 'divulgar/css/novo_pet.css' %}" rel="stylesheet">
+  <link href="{% static 'divulgar/css/seus_pet.css' %}" rel="stylesheet">
+  <link href="{% static 'adotar/css/listar_pets.css' %}" rel="stylesheet">
 
-                <div style="padding:60px" class="col-md">
+  <style>
+    .font-vinho {
+      color: #6a1b9a;
+      font-weight: bold;
+    }
 
-                    <h3 class="font-vinho">Quantidade de adoções por raça.</h3>
-                     <div style="width: 60%;">
-                        <canvas id="myChart"></canvas>
-                    </div>
-                </div>
+    .dashboard-box {
+      background-color: #f8f9fa;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.06);
+    }
 
+    .stat-card {
+      background-color: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+      transition: transform 0.2s ease;
+    }
+
+    .stat-card:hover {
+      transform: scale(1.03);
+    }
+
+    .stat-card h4 {
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+      color: #555;
+    }
+
+    .stat-card span {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #6a1b9a;
+    }
+
+    canvas {
+      max-width: 100% !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      {% include "side_bar.html" %}
+
+      <div class="col-md p-4">
+        <div class="dashboard-box">
+          <h3 class="font-vinho mb-4">📊 Dashboard de adoções</h3>
+
+          <div class="row mb-5">
+            <div class="col-md-4">
+              <div class="stat-card">
+                <h4>Total de Pets</h4>
+                <span>{{ total_pets }}</span>
+              </div>
             </div>
+            <div class="col-md-4">
+              <div class="stat-card">
+                <h4>Pets Adotados</h4>
+                <span>{{ pets_adotados }}</span>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="stat-card">
+                <h4>Em Adoção</h4>
+                <span>{{ pets_para_adocao }}</span>
+              </div>
+            </div>
+          </div>
+
+          <h5 class="mb-3">📈 Quantidade de adoções por raça</h5>
+          <div>
+            <canvas id="myChart"></canvas>
+          </div>
         </div>
+      </div>
+    </div>
+  </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+  <script>
+    fetch("/divulgar/api_adocoes_por_raca/")
+      .then(response => response.json())
+      .then(data_adocoes => {
+        const data = {
+          labels: data_adocoes['labels'],
+          datasets: [{
+            label: 'Quantidade',
+            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            borderColor: 'rgb(255, 99, 132)',
+            borderWidth: 2,
+            pointRadius: 4,
+            pointBackgroundColor: 'rgb(255, 99, 132)',
+            data: data_adocoes['qtd_adocoes']
+          }]
+        };
 
+        const config = {
+          type: 'line',
+          data: data,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  precision: 0
+                }
+              }
+            },
+            plugins: {
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: false
+              }
+            }
+          }
+        };
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    </body>
+        new Chart(document.getElementById('myChart'), config);
+      });
+  </script>
+</body>
 </html>
-
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-
-        fetch("/divulgar/api_adocoes_por_raca/",{
-            method: 'GET',
-        }).then(function(result){
-            return result.json()
-        }).then(function(data_adocoes){
-
-            const data = {
-                labels: data_adocoes['labels'],
-                datasets: [{
-                label: 'Quantidade',
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
-                data: data_adocoes['qtd_adocoes'],
-                }]
-            };
-            const config = {
-                type: 'line',
-                data: data,
-                options: {}
-            };
-
-            const myChart = new Chart(
-                document.getElementById('myChart'),
-                config
-            );
-
-
-        })
-
-
-
-    </script>

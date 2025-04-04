@@ -1,92 +1,130 @@
 {% load static %}
 <!doctype html>
 <html lang="pt-BR">
-    <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Cadastro</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{% static 'usuarios/css/cadastro.css' %}" rel="stylesheet">
-    <link href="{% static 'divulgar/css/novo_pet.css' %}" rel="stylesheet">
-    <link href="{% static 'divulgar/css/seus_pet.css' %}" rel="stylesheet">
-    <link href="{% static 'adotar/css/listar_pets.css' %}" rel="stylesheet">
-    <link href="{% static 'ver_pet/css/ver_pet.css' %}" rel="stylesheet">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ver Pet</title>
 
-    </head>
-    <body>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{% static 'ver_pet/css/ver_pet.css' %}" rel="stylesheet">
 
-        <div class="container-fluid">
-            <div class="row">
-                {% include "side_bar.html" %}
+  <style>
+    .font-vinho {
+      color: #6a1b9a;
+      font-weight: bold;
+    }
 
-                <div style="padding:60px" class="col-md">
-                    <h3 class="font-vinho">Informações do pet</h3>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <img width="100%" src="{{pet.foto.url}}">
-                        </div>
-                        <div class="col-md-9">
-                            <span class="span-bold">Nome:</span>
-                            <p>{{pet.nome}}</p>
-                            <div style="width:40%">
+    .span-bold {
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
 
-                            {% for tag in pet.tags.all %}
+    .pet-card {
+      background: #fff;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+    }
 
-                                <span style="font-size: 15px;" class="badge text-bg-info exemplo2 badge-lg">{{tag}}</span>
+    .pet-image {
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    }
 
-                            {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-md-5">
-                            <span class="span-bold">Descrição</span>
-                            <p>{{pet.descricao}}</p>
+    .badge-custom {
+      font-size: 0.85rem;
+      padding: 6px 10px;
+      margin: 2px 4px 2px 0;
+      border-radius: 20px;
+    }
 
-                        </div>
+    .btn-adotar {
+      padding: 12px 25px;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 8px;
+    }
 
-                        <div class="col-md-7">
-                        </div>
-                    </div>
-                    <hr>
+    .section-title {
+      border-left: 5px solid #6a1b9a;
+      padding-left: 12px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
 
-                    <div class="row">
-                        <h3 class="font-vinho">Informações residenciais</h3>
-                        <div class="col-md">
-                            <div class="row">
-                                <div class="col-md">
-                                    <span class="span-bold">Estado</span>
-                                    <p>{{pet.estado}}</p>
-                                </div>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      {% include "side_bar.html" %}
 
-                                <div class="col-md">
-                                    <span class="span-bold">Cidade</span>
-                                    <p>{{pet.cidade}}</p>
-                                </div>
-                            </div>
-                            <span class="span-bold">Telefone para contato</span>
-                            <p>{{pet.telefone}}</p>
-                            <br>
-                            <a href="{% url 'pedido_adocao' pet.id %}" class="btn btn-success btn-lg">SOLICITAR ADOÇÃO</a>
+      <div class="col-md p-5">
+        <div class="pet-card">
+          <!-- Título -->
+          <h3 class="font-vinho section-title">🐶 Informações do pet</h3>
 
-                        </div>
-
-                        <div class="col-md">
-                        </div>
-                    </div>
-                </div>
-
+          <div class="row mb-4">
+            <div class="col-md-4">
+              <img src="{{ pet.foto.url }}" alt="{{ pet.nome }}" class="pet-image">
             </div>
+            <div class="col-md-8">
+              <p class="span-bold mb-1">Nome:</p>
+              <p>{{ pet.nome }}</p>
 
+              {% if pet.raca %}
+                <p class="span-bold mb-1">Raça:</p>
+                <p>{{ pet.raca }}</p>
+              {% endif %}
 
+              {% if pet.tags.exists %}
+                <p class="span-bold mb-1">Características:</p>
+                <div>
+                  {% for tag in pet.tags.all %}
+                    <span class="badge bg-info text-dark badge-custom">{{ tag }}</span>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+          </div>
 
+          <!-- Descrição -->
+          {% if pet.descricao %}
+            <div class="mb-4">
+              <p class="span-bold mb-1">Descrição:</p>
+              <p>{{ pet.descricao }}</p>
+            </div>
+          {% endif %}
 
+          <!-- Informações residenciais -->
+          <h4 class="font-vinho section-title">📍 Informações residenciais</h4>
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <p class="span-bold mb-1">Estado:</p>
+              <p>{{ pet.estado }}</p>
+            </div>
+            <div class="col-md-4">
+              <p class="span-bold mb-1">Cidade:</p>
+              <p>{{ pet.cidade }}</p>
+            </div>
+            <div class="col-md-4">
+              <p class="span-bold mb-1">Telefone para contato:</p>
+              <p>{{ pet.telefone }}</p>
+            </div>
+          </div>
+
+          <!-- Botão de adoção -->
+          <div class="mt-4">
+            <a href="{% url 'pedido_adocao' pet.id %}" class="btn btn-success btn-adotar">
+              💌 Solicitar Adoção
+            </a>
+          </div>
         </div>
+      </div>
+    </div>
+  </div>
 
-
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    </body>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

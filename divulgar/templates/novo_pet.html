@@ -9,6 +9,44 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="{% static 'usuarios/css/cadastro.css' %}" rel="stylesheet">
     <link href="{% static 'divulgar/css/novo_pet.css' %}" rel="stylesheet">
+
+    <style>
+        .wrapper {
+            padding: 30px;
+        }
+
+        .box {
+            background-color: #f5f5f5;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            max-width: 700px;
+            margin: auto;
+        }
+
+        .font-vinho {
+            color: #6a1b9a;
+        }
+
+        .btn-custom-primary {
+            background-color: #6a1b9a;
+            color: white;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: 0.3s ease;
+        }
+
+        .btn-custom-primary:hover {
+            background-color: #4a106c;
+        }
+
+        select[multiple] {
+            height: 120px;
+            overflow-y: auto;
+        }
+    </style>
 </head>
 <body>
 <div class="container-fluid">
@@ -17,70 +55,71 @@
         <div class="col-md">
             <div class="wrapper">
                 <div class="box">
-                    <div class="header-box">
+                    <div class="header-box mb-3">
                         <h3 class="font-vinho">Quero divulgar</h3>
                         <hr>
                     </div>
-                    <div class="body-box">
-                        <form action="{% url 'novo_pet' %}" method="POST" enctype='multipart/form-data'>
-                            {% csrf_token %}
 
-                            {% if messages %}
-                                <br>
-                                {% for message in messages %}
-                                    <div class="alert {{ message.tags }}">
-                                        {{ message }}
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert {{ message.tags }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
 
+                    <form action="{% url 'novo_pet' %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label class="form-label">Foto</label>
                             <input type="file" name="foto" class="form-control">
-                            <br>
-                            <span>Nome:</span>
-                            <input type="text" class="form-control" name="nome"
-                                   placeholder="Digite o nome do pet...">
-                            <br>
-                            <span>Descrição:</span>
-                            <textarea class="form-control" name="descricao"
-                                      placeholder="Descrição..."></textarea>
-                            <br>
-                            <div class="row">
-                                <div class="col-md">
-                                    <span>Estado:</span>
-                                    <input type="text" placeholder="Digite o estado do pet..." name="estado"
-                                           class="form-control">
-                                </div>
-                                <div class="col-md">
-                                    <span>Cidade:</span>
-                                    <input type="text" placeholder="Digite a cidade do pet..." name="cidade"
-                                           class="form-control">
-                                </div>
-                            </div>
-                            <br>
-                            <span>Telefone para contato:</span>
-                            <input type="text" placeholder="Digite o seu telefone..." name="telefone"
-                                   class="form-control">
-                            <br>
-                            <span>Tags:</span>
-                            <select name="tags" multiple class="form-select">
+                        </div>
 
+                        <div class="mb-3">
+                            <label class="form-label">Nome</label>
+                            <input type="text" class="form-control" name="nome" placeholder="Digite o nome do pet...">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Descrição</label>
+                            <textarea class="form-control" name="descricao" placeholder="Descrição..."></textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Estado</label>
+                                <input type="text" class="form-control" name="estado" placeholder="Digite o estado...">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Cidade</label>
+                                <input type="text" class="form-control" name="cidade" placeholder="Digite a cidade...">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Telefone para contato</label>
+                            <input type="text" class="form-control" name="telefone" placeholder="Digite o telefone...">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Tags</label>
+                            <select name="tags" multiple class="form-select">
                                 {% for tag in tags %}
                                     <option value="{{ tag.id }}">{{ tag }}</option>
                                 {% endfor %}
-
                             </select>
-                            <br>
-                            </span>Raça:</span>
-                            <select name="raca" class="form-select">
+                        </div>
 
+                        <div class="mb-4">
+                            <label class="form-label">Raça</label>
+                            <select name="raca" class="form-select">
                                 {% for raca in racas %}
                                     <option value="{{ raca.id }}">{{ raca }}</option>
                                 {% endfor %}
-
                             </select>
-                            <input type="submit" value="ENVIAR" class="btn-custom-primary">
-                        </form>
-                    </div>
+                        </div>
+
+                        <button type="submit" class="btn-custom-primary">ENVIAR</button>
+                    </form>
                 </div>
             </div>
         </div>

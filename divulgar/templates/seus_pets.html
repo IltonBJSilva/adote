@@ -3,73 +3,139 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Cadastro</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{% static 'usuarios/css/cadastro.css' %}" rel="stylesheet">
-    <link href="{% static 'divulgar/css/novo_pet.css' %}" rel="stylesheet">
-    <link href="{% static 'divulgar/css/seus_pet.css' %}" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Seus Pets</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{% static 'divulgar/css/seus_pet.css' %}" rel="stylesheet">
+
+  <style>
+    .wrapper {
+      padding: 30px;
+    }
+
+    .box {
+      background-color: #f9f9f9;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .font-vinho {
+      color: #6a1b9a;
+      font-weight: bold;
+    }
+
+    .tabela {
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .tabela thead th {
+      background-color: #eee;
+      padding: 16px;
+      text-align: center;
+      font-weight: 600;
+      color: #444;
+    }
+
+    .tabela tbody td {
+      vertical-align: middle;
+      text-align: center;
+      padding: 16px;
+      background-color: #fff;
+    }
+
+    .tabela tbody tr:nth-child(even) td {
+      background-color: #f1f1f1;
+    }
+
+    .tabela img {
+      max-width: 80px;
+      border-radius: 8px;
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-danger, .btn-warning {
+      padding: 6px 14px;
+      font-weight: bold;
+      border-radius: 6px;
+    }
+
+    .btn-warning {
+      color: #fff;
+    }
+
+    .badge {
+      font-size: 0.9rem;
+      padding: 6px 12px;
+    }
+  </style>
 </head>
+
 <body>
-<div class="container-fluid">
+  <div class="container-fluid">
     <div class="row">
-        {% include "side_bar.html" %}
-        <div class="col-md">
-            <div class="wrapper">
-                <div class="box width80">
+      {% include "side_bar.html" %}
+      <div class="col-md">
+        <div class="wrapper">
+          <div class="box">
 
-                    {% if messages %}
-                        <br>
-                        {% for message in messages %}
-                            <div class="alert {{ message.tags }}">
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                    {% endif %}
+            {% if messages %}
+              {% for message in messages %}
+                <div class="alert {{ message.tags }}">{{ message }}</div>
+              {% endfor %}
+            {% endif %}
 
-                    <h3 class="font-vinho">Seus pets</h3>
-                    <hr>
-                    <table class="tabela" cellpadding="20">
-                        <tr>
-                            <th>Foto</th>
-                            <th>Nome</th>
-                            <th>Raça</th>
-                            <th>Status</th>
-                            <th>Remover</th>
-                        </tr>
+            <h3 class="font-vinho mb-3">🐾 Seus pets</h3>
+            <hr>
 
-                        {% for pet in pets %}
-                            <tr class="tabela-linha">
-                                <td width="20%">
-                                    <img width="40%" src="{{ pet.foto.url }}">
-                                </td>
-                                <td>
-                                    {{ pet.nome }}
-                                </td>
-                                <td>
-                                    {{ pet.raca }}
-                                </td>
-                                <td>
-                                    {% if pet.status == "P" %}
-                                        <span class="badge text-bg-primary">Para adoção</span>
-                                    {% elif pet.status == "A" %}
-                                        <span class="badge text-bg-success">Adotado</span>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    <a href="{% url 'remover_pet' pet.id %}" class="btn btn-danger">REMOVER</a>
-                                </td>
-                            </tr>
-                        {% endfor %}
-
-                    </table>
-                </div>
+            <div class="table-responsive">
+              <table class="table tabela table-bordered align-middle">
+                <thead>
+                  <tr>
+                    <th>Foto</th>
+                    <th>Nome</th>
+                    <th>Raça</th>
+                    <th>Status</th>
+                    <th>Editar</th>
+                    <th>Remover</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for pet in pets %}
+                    <tr>
+                      <td>
+                        <img src="{{ pet.foto.url }}" alt="{{ pet.nome }}">
+                      </td>
+                      <td>{{ pet.nome }}</td>
+                      <td>{{ pet.raca }}</td>
+                      <td>
+                        {% if pet.status == "P" %}
+                          <span class="badge text-bg-primary">Para adoção</span>
+                        {% elif pet.status == "A" %}
+                          <span class="badge text-bg-success">Adotado</span>
+                        {% endif %}
+                      </td>
+                      <td>
+                        <a href="{% url 'editar_pet' pet.id %}" class="btn btn-warning">EDITAR</a>
+                      </td>
+                      <td>
+                        <a href="{% url 'remover_pet' pet.id %}" class="btn btn-danger">REMOVER</a>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
             </div>
-        </div>
-    </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
