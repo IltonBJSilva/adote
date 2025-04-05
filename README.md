@@ -1,4 +1,3 @@
-cat << 'EOF' > README.md
 # 🐾 ADO.TE – Plataforma para Adoção de Animais
 
 Aplicação desenvolvida com **Python** e **Django 4.1** para conectar pessoas que querem doar pets com quem deseja adotar um novo amigo.
@@ -7,53 +6,62 @@ Aplicação desenvolvida com **Python** e **Django 4.1** para conectar pessoas q
 
 ## 🚀 Funcionalidades
 
-- ✅ Cadastro e autenticação de usuários  
-- 🐶 Cadastro de animais para doação  
-- 🔍 Busca e filtragem de pets por cidade e raça  
-- 📥 Solicitação de adoção com controle de status  
-- 📊 Dashboard com dados estatísticos  
-- ✏️ Edição e remoção de pets  
+- ✅ Cadastro e autenticação de usuários
+- 🐶 Cadastro de animais para doação
+- 🔍 Busca e filtragem de pets por cidade e raça
+- 📥 Solicitação de adoção com controle de status
+- 📊 Dashboard com dados estatísticos
+- ✏️ Edição e remoção de pets
 
 ---
 
 ## 🛠️ Tecnologias e boas práticas
 
-- Python 3.12  
-- Django 4.1  
-- SQLite  
-- Bootstrap 5  
-- Templates com HTML + CSS customizado  
+- Python 3.12
+- Django 4.1
+- SQLite
+- Bootstrap 5
+- Templates com HTML + CSS customizado
 - Arquitetura MVT (Model-View-Template)
 
 ---
 
 ## 🖼️ Interfaces do Sistema
 
-### 🔐 Login do Usuário  
+### 🔐 Login do Usuário
+
 ![Login](https://github.com/IltonBJSilva/adote/blob/main/templates/static/readme/tela_login.png?raw=true)
 
-### 📝 Cadastro de Usuário  
+### 📝 Cadastro de Usuário
+
 ![Cadastro](https://github.com/IltonBJSilva/adote/blob/main/templates/static/readme/tela_cadastro.png?raw=true)
 
-### 🐕 Cadastro de Pet  
+### 🐕 Cadastro de Pet
+
 ![Cadastro Pet](https://github.com/IltonBJSilva/adote/blob/main/templates/static/readme/tela_divulgar.png?raw=true)
 
-### 🗃️ Meus Pets  
+### 🗃️ Meus Pets
+
 ![Meus Pets](https://github.com/IltonBJSilva/adote/blob/main/templates/static/readme/tela_meus_pets.png?raw=true)
 
-### 📄 Informações do Pet  
+### 📄 Informações do Pet
+
 ![Info Pet](https://github.com/IltonBJSilva/adote/blob/main/templates/static/readme/tela_info_pet.png?raw=true)
 
-### 📝 Edição de Pet  
+### 📝 Edição de Pet
+
 ![Editar Pet](https://github.com/IltonBJSilva/adote/blob/main/templates/static/readme/tela_editar.png?raw=true)
 
-### 📥 Solicitações de Adoção  
+### 📥 Solicitações de Adoção
+
 ![Solicitações](https://github.com/IltonBJSilva/adote/blob/main/templates/static/readme/tela_solicitacoes.png?raw=true)
 
-### 📈 Dashboard  
+### 📈 Dashboard
+
 ![Dashboard](https://github.com/IltonBJSilva/adote/blob/main/templates/static/readme/tela_dashboard.png?raw=true)
 
-### 🐾 Listagem de Pets para Adoção  
+### 🐾 Listagem de Pets para Adoção
+
 ![Listagem](https://github.com/IltonBJSilva/adote/blob/main/templates/static/readme/tela_listagem.png?raw=true)
 
 ---
@@ -62,49 +70,52 @@ Aplicação desenvolvida com **Python** e **Django 4.1** para conectar pessoas q
 
 ### 1. Crie um ambiente virtual
 
-\`\`\`bash
+
+```bash
 python -m venv env
 env\Scripts\activate.bat  # Windows
-\`\`\`
+```
+
 
 ### 2. Instale os requisitos
 
-\`\`\`bash
+```bash
 pip install -r requirements.txt
-\`\`\`
+```
 
 ### 3. Realize as migrações
 
-\`\`\`bash
+```bash
 python manage.py makemigrations
 python manage.py migrate
-\`\`\`
+```
 
 ### 4. Crie o superusuário
 
-\`\`\`bash
+
+```bash
 python manage.py createsuperuser
-\`\`\`
+```
 
 ### 5. Rode o servidor
 
-\`\`\`bash
+```bash
 python manage.py runserver
-\`\`\`
+```
 
 ---
 
 ## 🧪 Apps Django utilizados
 
-- \`usuarios\`: gerenciamento de login, cadastro e autenticação  
-- \`divulgar\`: CRUD dos pets e lógica das adoções  
-- \`adotar\`: listagem pública e controle de solicitações  
+- `Usuarios`: gerenciamento de login, cadastro e autenticação
+- `Divulgar`: CRUD dos pets e lógica das adoções
+- `adotar`: listagem pública e controle de solicitações
 
 ---
 
 ## 📦 Estrutura de diretórios
 
-\`\`\`bash
+```bash
 adote/
 ├── adote/
 ├── divulgar/
@@ -114,11 +125,10 @@ adote/
 │       └── (prints das telas do sistema)
 ├── templates/
 └── manage.py
-\`\`\`
+```
 
 ---
 
 ## 💡 Autor
 
 Desenvolvido com 💜 por **Ilton Batista**.
-EOF
