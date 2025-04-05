@@ -1,92 +1,124 @@
-# Aplicação usando Python e Django 4.1
+cat << 'EOF' > README.md
+# 🐾 ADO.TE – Plataforma para Adoção de Animais
 
-## ADO.TE 
+Aplicação desenvolvida com **Python** e **Django 4.1** para conectar pessoas que querem doar pets com quem deseja adotar um novo amigo.
 
-Aplicação que conecta pessoas que possuem animais para doação com interessadas em ter um animal de estimação.
+---
 
-Desenvolvida uma aplicação completa para adoção de animais.
+## 🚀 Funcionalidades
 
-## Tecnologias e práticas utilizadas
+- ✅ Cadastro e autenticação de usuários  
+- 🐶 Cadastro de animais para doação  
+- 🔍 Busca e filtragem de pets por cidade e raça  
+- 📥 Solicitação de adoção com controle de status  
+- 📊 Dashboard com dados estatísticos  
+- ✏️ Edição e remoção de pets  
 
-- Python
-- Django 4.1
-- SQLite
-- Arquitetura MVT
+---
 
-## Funcionalidades
+## 🛠️ Tecnologias e boas práticas
 
-- Autenticação e Cadastro de Usuários
-- Listagem, Cadastro e Remoção de Pets
-- Listagem e Busca de Pets para adoção
+- Python 3.12  
+- Django 4.1  
+- SQLite  
+- Bootstrap 5  
+- Templates com HTML + CSS customizado  
+- Arquitetura MVT (Model-View-Template)
 
-## Login de Usuario
+---
 
-![alt text](https://github.com/IltonBJSilva/adote/blob/main/templates/static/readme/logar.png?raw=true)
+## 🖼️ Interfaces do Sistema
 
-## Cadastro de Usuario
+### 🔐 Login do Usuário  
+![Login](https://github.com/IltonBJSilva/adote/blob/main/templates/static/readme/tela_login.png?raw=true)
 
-![alt text](https://github.com/IltonBJSilva/adote/blob/main/templates/static/readme/cadastre-se.png?raw=true)
+### 📝 Cadastro de Usuário  
+![Cadastro](https://github.com/IltonBJSilva/adote/blob/main/templates/static/readme/tela_cadastro.png?raw=true)
 
-## Cadastro de Pet
+### 🐕 Cadastro de Pet  
+![Cadastro Pet](https://github.com/IltonBJSilva/adote/blob/main/templates/static/readme/tela_divulgar.png?raw=true)
 
-![alt text](https://github.com/IltonBJSilva/adote/blob/main/templates/static/readme/novo_pet.png?raw=true)
+### 🗃️ Meus Pets  
+![Meus Pets](https://github.com/IltonBJSilva/adote/blob/main/templates/static/readme/tela_meus_pets.png?raw=true)
 
-## Meus Pet
+### 📄 Informações do Pet  
+![Info Pet](https://github.com/IltonBJSilva/adote/blob/main/templates/static/readme/tela_info_pet.png?raw=true)
 
-![alt text](https://github.com/IltonBJSilva/adote/blob/main/templates/static/readme/seus_pets.png?raw=true)
+### 📝 Edição de Pet  
+![Editar Pet](https://github.com/IltonBJSilva/adote/blob/main/templates/static/readme/tela_editar.png?raw=true)
 
-## Lista de Pet
+### 📥 Solicitações de Adoção  
+![Solicitações](https://github.com/IltonBJSilva/adote/blob/main/templates/static/readme/tela_solicitacoes.png?raw=true)
 
-![alt text](https://github.com/IltonBJSilva/adote/blob/main/templates/static/readme/adote.png?raw=true)
+### 📈 Dashboard  
+![Dashboard](https://github.com/IltonBJSilva/adote/blob/main/templates/static/readme/tela_dashboard.png?raw=true)
 
-## Comandos
+### 🐾 Listagem de Pets para Adoção  
+![Listagem](https://github.com/IltonBJSilva/adote/blob/main/templates/static/readme/tela_listagem.png?raw=true)
 
-### virtualenv (windows)
+---
 
-```
+## ⚙️ Como rodar o projeto
+
+### 1. Crie um ambiente virtual
+
+\`\`\`bash
 python -m venv env
-env\Scripts\activate.bat
-env\Scripts\deactivate.bat
-```
+env\Scripts\activate.bat  # Windows
+\`\`\`
 
-### Instalar bibliotecas, gravar/instalar requerimentos
+### 2. Instale os requisitos
 
-```
-(env) pip install Django
-(env) pip install Pillow
+\`\`\`bash
+pip install -r requirements.txt
+\`\`\`
 
-(env) pip freeze > requirements.txt
-(env) pip install -r requirements.txt
-```
+### 3. Realize as migrações
 
-### Criar projeto
+\`\`\`bash
+python manage.py makemigrations
+python manage.py migrate
+\`\`\`
 
-```
-(env) django-admin startproject adote .
-```
+### 4. Crie o superusuário
 
-### Criar super user (Django Administration)
+\`\`\`bash
+python manage.py createsuperuser
+\`\`\`
 
-```
-(env) python manage.py createsuperuser
-```
+### 5. Rode o servidor
 
-### Criar apps
+\`\`\`bash
+python manage.py runserver
+\`\`\`
 
-```
-(env) python manage.py startapp usuarios
-(env) python manage.py startapp divulgar
-```
+---
 
-### Migrations
+## 🧪 Apps Django utilizados
 
-```
-(env) python manage.py makemigrations
-(env) python manage.py migrate
-```
+- \`usuarios\`: gerenciamento de login, cadastro e autenticação  
+- \`divulgar\`: CRUD dos pets e lógica das adoções  
+- \`adotar\`: listagem pública e controle de solicitações  
 
-### Executar projeto
+---
 
-```
-(env) python manage.py runserver
-```
+## 📦 Estrutura de diretórios
+
+\`\`\`bash
+adote/
+├── adote/
+├── divulgar/
+├── usuarios/
+├── static/
+│   └── readme/
+│       └── (prints das telas do sistema)
+├── templates/
+└── manage.py
+\`\`\`
+
+---
+
+## 💡 Autor
+
+Desenvolvido com 💜 por **Ilton Batista**.
+EOF
