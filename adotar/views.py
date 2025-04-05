@@ -2,33 +2,26 @@ from datetime import datetime
 from django.contrib.messages import constants
 from django.contrib import messages
 from django.shortcuts import render, redirect
-from .models import PedidoAdocao
-
-from divulgar.models import Pet, Raca
 from django.core.mail import send_mail
 
+from .models import PedidoAdocao
+from divulgar.models import Pet, Raca
 
-#Função para listar
+
 def listar_pets(request):
     if request.method == "GET":
         cidade = request.GET.get('cidade')
         raca_filter = request.GET.get('raca')
 
-        pets = Pet.objects.filter(status="P")
+        pets = Pet.objects.filter(status="P").exclude(usuario=request.user)
         racas = Raca.objects.all()
 
-        #caso o usuario digite alguma cidade
         if cidade:
-            #icotains e não precisa digitar o nome inteiro da cidade, encontra so com algumas letras
             pets = pets.filter(cidade__icontains=cidade)
 
-        #caso o usuario opte pelo filtro de raças
         if raca_filter:
             pets = pets.filter(raca__id=raca_filter)
             raca_filter = Raca.objects.get(id=raca_filter)
-
-        # TODO: Colocar filtro de todos os cães
-
 
         return render(
             request,
@@ -36,63 +29,81 @@ def listar_pets(request):
             {'pets': pets, 'racas': racas, 'cidade': cidade, 'raca_filter': raca_filter}
         )
 
+
 def pedido_adocao(request, id_pet):
-    #buscar no banco de dados
-    pet = Pet.objects.filter(id=id_pet).filter(status="P")
+    pet = Pet.objects.filter(id=id_pet, status="P").first()
 
-
-    if not pet.exists():
-        messages.add_message(request, constants.WARNING, 'Esse pet ja foi adotado')
+    if not pet:
+        messages.add_message(request, constants.WARNING, 'Esse pet já foi adotado ou não existe.')
         return redirect('/adotar')
 
+    if pet.usuario == request.user:
+        messages.add_message(request, constants.WARNING, 'Você não pode adotar um pet que você mesmo cadastrou.')
+        return redirect('/adotar')
 
-    #Criar o pedido de adoção
-    pedido = PedidoAdocao(pet=pet.first(), # Pega o primeiro da lista com o .first
-                          usuario=request.user, # Passando o usuario logado
-                          data=datetime.now()) # a data do pedido
+    pedido_existente = PedidoAdocao.objects.filter(pet=pet, usuario=request.user, status='AG').exists()
+    if pedido_existente:
+        messages.add_message(request, constants.INFO, 'Você já fez um pedido de adoção para esse pet.')
+        return redirect('/adotar')
 
+    pedido = PedidoAdocao(
+        pet=pet,
+        usuario=request.user,
+        data=datetime.now()
+    )
     pedido.save()
 
-    messages.add_message(request, constants.SUCCESS, 'Pedido de adoção realizado, você receberá um e-mail caso ele seja aprovado.')
+    messages.add_message(request, constants.SUCCESS, 'Pedido de adoção realizado com sucesso. Você será notificado por e-mail caso ele seja aprovado.')
     return redirect('/adotar')
-
-
 
 
 def processa_pedido_adocao(request, id_pedido):
     status = request.GET.get('status')
     pedido = PedidoAdocao.objects.get(id=id_pedido)
-    #pet = Pet.objects.get(status=s)
+    pet = pedido.pet
 
+    # 🛡️ Permissões
+    if status in ["A", "R"] and request.user != pet.usuario:
+        messages.add_message(request, constants.ERROR, 'Você não tem permissão para aprovar ou recusar esse pedido.')
+        return redirect('/divulgar/ver_pedido_adocao')
+
+    if status == "C" and request.user != pedido.usuario:
+        messages.add_message(request, constants.ERROR, 'Você não tem permissão para cancelar esse pedido.')
+        return redirect('/adotar')
+
+    # ✅ Aprovar
     if status == "A":
         pedido.status = 'AP'
-        Pet.status = 'A'
-        string = '''Olá, sua adoção foi aprovada. ...'''
+        pet.status = 'A'
+        mensagem = '''Olá, sua adoção foi aprovada! 🎉 
+Seu novo amiguinho está esperando por você. Entre em contato com o responsável.'''
+
+    # ❌ Recusar
     elif status == "R":
-        string = '''Olá, sua adoção foi recusada. ...'''
-        Pet.status = 'P'
         pedido.status = 'R'
+        mensagem = '''Olá, infelizmente sua adoção foi recusada. 😞 
+Mas não desanime! Muitos pets ainda estão esperando por um lar.'''
+
+    # ❎ Cancelar
+    elif status == "C":
+        pedido.status = 'C'
+        mensagem = '''Olá, seu pedido de adoção foi cancelado com sucesso. Esperamos vê-lo de volta em breve!'''
+
+    else:
+        messages.add_message(request, constants.ERROR, 'Status de adoção inválido.')
+        return redirect('/divulgar/ver_pedido_adocao')
 
     pedido.save()
+    if status == "A":
+        pet.save()
 
-    # TODO: Alterar status do PET
+    if status in ["A", "R"]:
+        send_mail(
+            'Status da sua adoção - ADO.TE',
+            mensagem,
+            'iltonbatista2018@gmail.com.br',
+            [pedido.usuario.email],
+        )
 
-    print(pedido.usuario.email)
-    email = send_mail(
-        'Sua adoção foi processada',
-        string,
-        'iltonbatista2018@gmail.com.br',
-        [pedido.usuario.email,],
-    )
-
-    messages.add_message(request, constants.SUCCESS, 'Pedido de adoção processado com sucesso')
-    return redirect('/divulgar/ver_pedido_adocao')
-
-
-
-
-
-
-
-
-
+    messages.add_message(request, constants.SUCCESS, 'Pedido processado com sucesso.')
+    return redirect('/divulgar/ver_pedido_adocao' if request.user == pet.usuario else '/adotar')
